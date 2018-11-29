@@ -1,34 +1,30 @@
-# Git::Merge::Structure::Sql
+# git-merge-structure-sql
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/git/merge/structure/sql`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a merge driver for Git that resolves trivial parts of
+merge conflicts in a db/structure.sql file of Rails.
 
-TODO: Delete this and the text above, and describe your gem
+Currently only PostgreSQL and MySQL dump formats are supported.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'git-merge-structure-sql'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Run this:
 
     $ gem install git-merge-structure-sql
 
+And enable it yourself in your Git configuration, or let it do that
+for you by this command:
+
+    $ git-merge-structure-sql --install
+
+This adds necessary settings to your
+`~/.gitconfig`/`$XDG_CONFIG_HOME/git/config` and the default
+gitattributes(5) file to enable the merge driver for structure.sql
+files.
+
 ## Usage
 
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Once enabled, Git should call this driver as necessary when it needs
+to merge changes made in structure.sql.
 
 ## Contributing
 

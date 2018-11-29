@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
-require "git/merge/structure/sql"
+require "git-merge-structure-sql"
+
+StructureSqlMergeDriver.new.main(*ARGV)
