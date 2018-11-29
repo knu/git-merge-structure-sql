@@ -144,6 +144,7 @@ class StructureSqlMergeDriver
 
       usage: #{myname} <current-file> <base-file> <other-file>
              #{myname} --install
+
     EOF
 
     install = false
