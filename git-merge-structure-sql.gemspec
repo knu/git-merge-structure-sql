@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = StructureSqlMergeDriver::VERSION
   spec.authors       = ["Akinori MUSHA"]
   spec.email         = ["knu@idaemons.org"]
+  spec.license       = "BSD-2-Clause"
 
   spec.summary       = %q{git merge driver for db/structure.sql in a Rails project}
   spec.homepage      = "https://github.com/knu/git-merge-structure-sql"
