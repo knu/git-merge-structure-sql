@@ -36,9 +36,9 @@ class StructureSqlMergeDriver
   VERSION = '1.0.0'
   VARIANTS = []
 
-  module PostgreSQL
+  module Default # This covers PostgreSQL, SQLite and newer MySQL formats.
     RE_VERSION = /^\('(\d+)'\)[,;]\n/
-    RE_VERSIONS = /^INSERT INTO "schema_migrations" \(version\) VALUES\n\K#{RE_VERSION}+/
+    RE_VERSIONS = /^INSERT INTO (?<q>["`])schema_migrations\k<q> \(version\) VALUES\n\K#{RE_VERSION}+/
 
     class << self
       def match?(content)
@@ -68,7 +68,7 @@ class StructureSqlMergeDriver
       end
     end
 
-    VARIANTS << self
+    VARIANTS.unshift self
   end
 
   module MySQL
@@ -125,7 +125,7 @@ class StructureSqlMergeDriver
       end
     end
 
-    VARIANTS << self
+    VARIANTS.unshift self
   end
 
   def system!(*args)
