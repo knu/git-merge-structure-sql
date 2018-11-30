@@ -27,6 +27,10 @@ files.
 Once enabled, Git should call this driver as necessary when it needs
 to merge changes made in structure.sql.
 
+## History
+
+See `CHANGELOG.md` for the version history.
+
 ## Author
 
 Copyright (c) 2018 Akinori MUSHA.
