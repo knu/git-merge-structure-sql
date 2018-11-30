@@ -3,7 +3,8 @@
 This is a merge driver for Git that resolves trivial parts of
 merge conflicts in a db/structure.sql file of Rails.
 
-Currently only PostgreSQL and MySQL dump formats are supported.
+Currently only PostgreSQL, MySQL and SQLite3 dump formats are
+supported.
 
 ## Installation
 
@@ -26,6 +27,12 @@ files.
 Once enabled, Git should call this driver as necessary when it needs
 to merge changes made in structure.sql.
 
-## Contributing
+## Author
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/knu/git-merge-structure-sql.
+Copyright (c) 2018 Akinori MUSHA.
+
+Licensed under the 2-clause BSD license.  See `LICENSE.txt` for
+details.
+
+Visit the [GitHub Repository](https://github.com/knu/sidetiq-timezone)
+for the latest information.
