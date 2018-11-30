@@ -1,7 +1,16 @@
 # git-merge-structure-sql
 
-This is a merge driver for Git that resolves trivial parts of
-merge conflicts in a db/structure.sql file of Rails.
+This is a merge driver for Git that resolves typical merge conflicts
+in a `db/structure.sql` file of Rails.
+
+When your project is configured with
+`config.active_record.schema_format = :sql`, the database schema is
+kept in `db/structure.sql` instead of `db/schema.rb` in the native
+dump format of the underlying database engine, which is not suitable
+for the default merge driver of Git to deal with.  As a result, when
+you try to merge two branches you always have to resolve trivial
+conflicts manually if new schema migrations take place in both
+branches.  This custom driver takes away such a pain.
 
 Currently only PostgreSQL, MySQL and SQLite3 dump formats are
 supported.
@@ -17,10 +26,9 @@ for you by this command:
 
     $ git-merge-structure-sql --install
 
-This adds necessary settings to your
-`~/.gitconfig`/`$XDG_CONFIG_HOME/git/config` and the default
-gitattributes(5) file to enable the merge driver for structure.sql
-files.
+This adds necessary settings to your `~/.gitconfig` or
+`$XDG_CONFIG_HOME/git/config` and the default gitattributes(5) file to
+enable the merge driver for structure.sql files.
 
 ## Usage
 
