@@ -192,12 +192,13 @@ class StructureSqlMergeDriver
           } or raise "don't you have home?"
         end
 
-      File.open(attributes_file, 'r+') { |f|
+      File.open(attributes_file, 'a+') { |f|
         pattern = /^\s*structure.sql\s+(?:\S+\s+)*merge=#{Regexp.quote(driver_name)}(?:\s|$)/
         break if f.any? { |line| pattern === line }
 
         puts "Enabling the \"#{driver_name}\" driver for structure.sql"
-        f.puts "\nstructure.sql merge=#{driver_name}"
+        f.puts if f.pos > 0
+        f.puts "structure.sql merge=#{driver_name}"
       }
 
       exit
