@@ -6,7 +6,7 @@
 # How to use:
 #     $ git-merge-structure-sql --install
 #
-# Copyright (c) 2018 Akinori MUSHA
+# Copyright (c) 2018-2021 Akinori MUSHA
 #
 # All rights reserved.
 #
@@ -33,7 +33,7 @@
 #
 
 class StructureSqlMergeDriver
-  VERSION = '1.1.0'
+  VERSION = '1.1.1'
   VARIANTS = []
 
   module Default # This covers PostgreSQL, SQLite and newer MySQL formats.
