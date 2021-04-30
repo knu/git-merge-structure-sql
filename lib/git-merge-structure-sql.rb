@@ -154,49 +154,73 @@ class StructureSqlMergeDriver
       opts.summary_indent = ''
       opts.summary_width = 24
 
-      opts.on('--install',
-        "Enable this merge driver in Git") { |val|
-        install = val
+      opts.on('--install[={global|local}]',
+        "Enable this merge driver in Git (default: global)") { |val|
+        case install = val&.to_sym || :global
+        when :global, :local
+          # ok
+        else
+          raise OptionParser::InvalidArgument, "--install=#{val}: unknown argument"
+        end
       }
     }
 
     files = opts.order(argv)
 
     if install
-      puts "Registering the \"#{driver_name}\" driver in your git configuration"
+      global = install == :global
 
-      system!(*%W[
-        git config --global merge.#{driver_name}.name
-        #{'Rails structure.sql merge driver'}
-      ])
-      system!(*%W[
-        git config --global merge.#{driver_name}.driver
-        #{"#{myname.shellescape} %A %O %B"}
-      ])
+      git_config = ["git", "config", *("--global" if global)]
 
-      attributes_file = `git config --global core.attributesfile`.chomp
+      config_file = `GIT_EDITOR=echo #{git_config.shelljoin} -e 2>/dev/null`.chomp
+
+      puts "#{config_file}: Adding the \"#{driver_name}\" driver definition"
+
+      system!(
+        *git_config,
+        "merge.#{driver_name}.name",
+        "Rails structure.sql merge driver"
+      )
+      system!(
+        *git_config,
+        "merge.#{driver_name}.driver",
+        "#{myname.shellescape} %A %O %B"
+      )
+
       attributes_file =
-        if $?.success?
-          File.expand_path(attributes_file)
+        if global
+          filename = `git config --global core.attributesfile`.chomp
+
+          if $?.success?
+            File.expand_path(filename)
+          else
+            [
+              [File.join(ENV['XDG_CONFIG_HOME'] || '~/.config', 'git'), 'attributes'],
+              ['~', '.gitattributes']
+            ].find { |dir, file|
+              if File.directory?(File.expand_path(dir))
+                system!(*%W[
+                  git config --global core.attributesfile #{File.join(dir, file)}
+                ])
+                break File.expand_path(file, dir)
+              end
+            } or raise "don't you have home?"
+          end
         else
-          [
-            [File.join(ENV['XDG_CONFIG_HOME'] || '~/.config', 'git'), 'attributes'],
-            ['~', '.gitattributes']
-          ].find { |dir, file|
-            if File.directory?(File.expand_path(dir))
-              system!(*%W[
-                git config --global core.attributesfile #{File.join(dir, file)}
-              ])
-              break File.expand_path(file, dir)
-            end
-          } or raise "don't you have home?"
+          git_dir = `git rev-parse --git-dir`.chomp
+
+          if $?.success?
+            File.expand_path(File.join('info', 'attributes'), git_dir)
+          else
+            raise "not in a git directory"
+          end
         end
 
       File.open(attributes_file, 'a+') { |f|
         pattern = /^\s*structure.sql\s+(?:\S+\s+)*merge=#{Regexp.quote(driver_name)}(?:\s|$)/
         break if f.any? { |line| pattern === line }
 
-        puts "Enabling the \"#{driver_name}\" driver for structure.sql"
+        puts "#{attributes_file}: Registering the \"#{driver_name}\" driver for structure.sql"
         f.puts if f.pos > 0
         f.puts "structure.sql merge=#{driver_name}"
       }
