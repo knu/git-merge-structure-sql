@@ -30,6 +30,11 @@ This adds necessary settings to your `~/.gitconfig` or
 `$XDG_CONFIG_HOME/git/config` and the default gitattributes(5) file to
 enable the merge driver for structure.sql files.
 
+If you want to enable this driver only in the current git directory,
+run this:
+
+    $ git-merge-structure-sql --install=local
+
 ## Usage
 
 Once enabled, Git should call this driver as necessary when it needs

@@ -33,7 +33,7 @@
 #
 
 class StructureSqlMergeDriver
-  VERSION = '1.1.1'
+  VERSION = '1.1.2'
   VARIANTS = []
 
   module Default # This covers PostgreSQL, SQLite and newer MySQL formats.

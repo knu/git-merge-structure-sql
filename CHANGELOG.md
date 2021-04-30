@@ -12,3 +12,7 @@
 ## 1.1.1 (2021-04-28)
 
 - Fix installation when the attribute file does not exist yet
+
+## 1.1.2 (2021-04-30)
+
+- Implemnt local installation with --install=local
