@@ -71,6 +71,41 @@ class StructureSqlMergeDriver
     VARIANTS.unshift self
   end
 
+  module Postgresql # This covers PostgreSQL with leading commas
+    RE_VERSION = /^[, ]\('(\d+)'\)\n/
+    RE_VERSIONS = /^INSERT INTO (?<q>["`])schema_migrations\k<q> \(version\) VALUES\n\K#{RE_VERSION}+;/
+
+    class << self
+      def match?(content)
+        RE_VERSIONS === content
+      end
+
+      def merge!(*contents)
+        merge_versions!(*contents)
+      end
+
+      private
+
+      def merge_versions!(*contents)
+        replacement = format_versions(
+          contents.inject([]) { |versions, content|
+            versions | content[RE_VERSIONS].scan(RE_VERSION).flatten
+          }.sort
+        )
+
+        contents.each { |content|
+          content.sub!(RE_VERSIONS, replacement)
+        }
+      end
+
+      def format_versions(versions)
+        " " + versions.map { |version| "('%s')" % version }.join("\n,") << "\n;"
+      end
+    end
+
+    VARIANTS.unshift self
+  end
+
   module MySQL
     class << self
       RE_DUMP_TIMESTAMP = /^-- Dump completed on \K.+$/
