@@ -44,4 +44,8 @@ RSpec.describe StructureSqlMergeDriver do
   it "merges PostgreSQL dump files" do
     test_merge('postgresql')
   end
+
+  it "merges newer PostgreSQL dump files" do
+    test_merge("postgresql-leading-comma")
+  end
 end
