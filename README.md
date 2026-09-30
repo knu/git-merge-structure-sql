@@ -17,7 +17,13 @@ supported.
 
 ## Installation
 
-Run this:
+Install with mise (requires Ruby on `PATH`):
+
+```sh
+mise use -g github:knu/git-merge-structure-sql@latest
+```
+
+Or install the Ruby gem:
 
     $ gem install git-merge-structure-sql
 
